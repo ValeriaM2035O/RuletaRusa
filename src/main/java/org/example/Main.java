@@ -8,7 +8,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         ArrayList<String> jugadores = new ArrayList<>();
 
-        System.out.println("Ingrese el nombre de los jugadores");
+        System.out.println("Ingrese el nombre de los jugadores (MINIMO 2)");
         while (true) {
             System.out.println("Nombre:");
             String nombre = scanner.nextLine();
@@ -19,26 +19,31 @@ public class Main {
         }
 
         if (jugadores.size() < 2) {
-            System.out.println("Deben haber al menos 2 jugadores.");
+            System.out.println("Deben haber al menos 2 jugadores.") ;
         } else {
             System.out.println("Jugadores registrados: " + jugadores);
         }
 
 
-        boolean finDelJuego = false;
-        int turno = 0;
+        Ruleta juego = new Ruleta(jugadores);
 
-        while (!finDelJuego) {
-            System.out.println("Turno de " + jugadores.get(turno));
+        while (true) {
+            juego.mostrarEstado();
 
-            System.out.println(jugadores.get(turno) + " presiona el gatillo...");
+            System.out.println("\n¿Quieres disparar? (s/n)");
+            String accion = scanner.nextLine().toLowerCase();
 
+            if (accion.equals("n")) break;
 
-            if (!finDelJuego) {
-                turno = (turno + 1) % jugadores.size();
+            String jugadorActual = juego.getTambor().get(juego.getPosicionTamborActual());
+
+            if (juego.disparar()) {
+                System.out.println("¡PUM! " + jugadorActual + " ha muerto");
+                break;
+            } else {
+
+                System.out.println("¡QUE SUERTE! " + jugadorActual + " sobrevive");
             }
         }
-
-        System.out.println("Fin del juego.");
+            }
     }
-}

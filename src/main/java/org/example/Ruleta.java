@@ -1,7 +1,6 @@
 package org.example;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class Ruleta {
@@ -19,6 +18,13 @@ public class Ruleta {
         this.posicionBalaActual = posicionBalaActual;
         this.posicionTamborActual = posicionTamborActual;
         this.random = random;
+    }
+
+    public Ruleta(ArrayList<String> jugadores) {
+        this.tambor = jugadores;
+        this.random = new Random();
+        this.posicionTamborActual = 0;
+        this.posicionBalaActual = random.nextInt(jugadores.size());
     }
 
     public ArrayList<String> getTambor() {
@@ -63,37 +69,31 @@ public class Ruleta {
                 '}';
     }
 
-    public boolean disparar(ArrayList<String> tambor, int posicionBalaActual, int posicionTamborActual, Random random, int turno) {
+    public boolean disparar() {
+        boolean acertado = (posicionTamborActual == posicionBalaActual);
 
-        if (posicionBalaActual == posicionTamborActual) {
-            System.out.println("Jugador muerto" + tambor.get(posicionTamborActual));
-            tambor.remove(posicionTamborActual);
 
-            if (!tambor.isEmpty()) {
-                posicionBalaActual = random.nextInt(tambor.size());
-                System.out.println("Nueva posición de la bala: " + posicionBalaActual);
-                cambiarTurno();
-                return true;
-            } else {
-                System.out.println("No hay jugadores en el tambor.");
-                return false;
-            }
-        } else {
-            System.out.println("Pasa el arma al siguiente.");
-            cambiarTurno();
-            return false;
+        posicionTamborActual = (posicionTamborActual + 1) % tambor.size();
+
+        if (acertado) {
+            nuevoAleatorio();
         }
+
+        return acertado;
     }
 
-    private void cambiarTurno() {
-        if (!tambor.isEmpty()) {
-            posicionTamborActual = (posicionTamborActual + 1) % tambor.size();
-            System.out.println("Turno del jugador: " + tambor.get(posicionTamborActual));
-        } else {
-            System.out.println("No hay más jugadores.");
-        }
+    private void nuevoAleatorio() {
+        posicionBalaActual = random.nextInt(tambor.size());
+    }
+
+
+    public void mostrarEstado() {
+        System.out.println("Estado actual");
+        System.out.println("Jugador en turno: " + tambor.get(posicionTamborActual));
+        System.out.println("Posición del tambor: " + posicionTamborActual);
+        System.out.println("Posición de la bala: " + posicionBalaActual);
+    }
 
     }
 
-}
 
